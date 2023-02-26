@@ -38,6 +38,20 @@ RSpec.describe "api/v1/items", type: :request do
     it "renders a successful response" do
       get api_v1_items_url, headers: valid_headers, as: :json
       expect(response).to be_successful
+      expect(json_body).to eq(
+        {
+          data: [
+            { attributes: {
+                code: item.code,
+                name: item.name,
+                price: item.price.to_s
+              },
+              id: item.code,
+              type: "item"
+            }
+          ]
+        }
+      )
     end
   end
 
@@ -45,8 +59,21 @@ RSpec.describe "api/v1/items", type: :request do
     let!(:item){ create :item }
 
     it "renders a successful response" do
-      get api_v1_item_url(item), as: :json
+      get api_v1_item_url(code: item.code), as: :json
       expect(response).to be_successful
+      expect(json_body).to eq(
+        {
+          data: {
+            attributes: {
+              code: item.code,
+              name: item.name,
+              price: item.price.to_s
+            },
+            id: item.code,
+            type: "item"
+          }
+        }
+      )
     end
   end
 
@@ -64,6 +91,19 @@ RSpec.describe "api/v1/items", type: :request do
              params: { item: valid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:created)
         expect(response.content_type).to match(a_string_including("application/json"))
+        expect(json_body).to eq(
+          {
+            data: {
+              attributes: {
+                code: valid_attributes[:code],
+                name: valid_attributes[:name],
+                price: valid_attributes[:price].to_s
+              },
+              id: valid_attributes[:code],
+              type: "item"
+            }
+          }
+        )
       end
     end
 
@@ -89,7 +129,7 @@ RSpec.describe "api/v1/items", type: :request do
 
     context "with valid parameters" do
       let(:new_attributes) {
-        FactoryBot.attributes_for(:item).slice(:price, :code)
+        FactoryBot.attributes_for(:item).slice(:price)
       }
 
       it "updates the requested item" do
@@ -104,6 +144,19 @@ RSpec.describe "api/v1/items", type: :request do
               params: { item: new_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to match(a_string_including("application/json"))
+        expect(json_body).to eq(
+          {
+            data: {
+              attributes: {
+                code: item.code,
+                name: item.name,
+                price: new_attributes[:price].to_s
+              },
+              id: item.code,
+              type: "item"
+            }
+          }
+        )
       end
     end
 
