@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :items, param: :code
+      resources :cart, only: :create
     end
   end
 end
