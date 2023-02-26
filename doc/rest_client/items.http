@@ -46,3 +46,96 @@ content-type: application/json
     }
   ]
 }
+
+###
+POST http://localhost:3000/api/v1/cart
+content-type: application/json
+
+{
+  "items": [
+    {
+      "code": "MUG",
+      "quantity": 1
+    },
+    {
+      "code": "TSHIRT",
+      "quantity": 1
+    },
+    {
+      "code": "HOODIE",
+      "quantity": 1
+    }
+  ]
+}
+
+###
+POST http://localhost:3000/api/v1/cart
+content-type: application/json
+
+{
+  "items": [
+    {
+      "code": "MUG",
+      "quantity": 9
+    },
+    {
+      "code": "TSHIRT",
+      "quantity": 1
+    }
+  ]
+}
+
+###
+POST http://localhost:3000/api/v1/cart
+content-type: application/json
+
+{
+  "items": [
+    {
+      "code": "MUG",
+      "quantity": 10
+    },
+    {
+      "code": "TSHIRT",
+      "quantity": 1
+    }
+  ]
+}
+
+###
+POST http://localhost:3000/api/v1/cart
+content-type: application/json
+
+{
+  "items": [
+    {
+      "code": "MUG",
+      "quantity": 45
+    },
+    {
+      "code": "TSHIRT",
+      "quantity": 3
+    }
+  ]
+}
+
+###
+POST http://localhost:3000/api/v1/cart
+content-type: application/json
+
+{
+  "items": [
+    {
+      "code": "MUG",
+      "quantity": 200
+    },
+    {
+      "code": "TSHIRT",
+      "quantity": 4
+    },
+    {
+      "code": "HOODIE",
+      "quantity": 1
+    }
+  ]
+}

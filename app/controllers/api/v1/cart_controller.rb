@@ -1,7 +1,10 @@
 class Api::V1::CartController < ApplicationController
   def create
+    price = Items::PriceCalculator.call(items: cart_params[:items])
     render json: CartSerializer.new(
-      total: Items::PriceCalculator.call(items: cart_params[:items]),
+      total: price[:total],
+      total_price: price[:total_price],
+      total_discount: price[:total_discount],
       items: cart_params[:items]
     ).serializable_hash.to_json, status: :ok
   rescue StandardError

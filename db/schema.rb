@@ -10,14 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_25_211231) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_26_155016) do
+  create_table "discounts", force: :cascade do |t|
+    t.integer "item_id", null: false
+    t.integer "quantity", null: false
+    t.decimal "percentage", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_id"], name: "index_discounts_on_item_id"
+  end
+
   create_table "items", force: :cascade do |t|
-    t.string "code"
-    t.string "name"
+    t.string "code", null: false
+    t.string "name", null: false
     t.decimal "price", precision: 8, scale: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["code", "name"], name: "index_items_on_code_and_name", unique: true
   end
 
+  add_foreign_key "discounts", "items"
 end
