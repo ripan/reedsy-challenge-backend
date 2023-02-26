@@ -16,20 +16,29 @@ RSpec.describe Item, type: :model do
     let!(:item){ create :item, code: "MUG", price: 6.00 }
 
     it "calculates total price" do
-      expect(item.total_price(quantity: 5)).to eq(30)
-      expect(item.total_price(quantity: 10)).to eq(60)
-      expect(item.total_price(quantity: 1)).to eq(6)
+      expect(item.total_discount(quantity: 1)).to eq(0)
+      expect(item.total_discount(quantity: 2)).to eq(0)
+      expect(item.total_discount(quantity: 3)).to eq(0)
+      expect(item.total_discount(quantity: 4)).to eq(0)
+      expect(item.total_discount(quantity: 29)).to eq(0)
+      expect(item.total_discount(quantity: 30)).to eq(0)
+      expect(item.total_discount(quantity: 31)).to eq(0)
     end
   end
 
   describe "#total_discount" do
-    let(:discount){ build :discount, quantity: 3, percentage: 30 }
-    let(:item){ create :item, code: "MUG", price: 6.00, discounts: [discount] }
+    let(:discount_1){ build :discount, quantity: 3, percentage: 30 }
+    let(:discount_2){ build :discount, quantity: 30, percentage: 60 }
+    let(:item){ create :item, code: "MUG", price: 6.00, discounts: [discount_1, discount_2] }
 
     it "calculates total discount" do
       expect(item.total_discount(quantity: 1)).to eq(0)
+      expect(item.total_discount(quantity: 2)).to eq(0)
       expect(item.total_discount(quantity: 3)).to eq(5.4)
-      expect(item.total_discount(quantity: 10)).to eq(18)
+      expect(item.total_discount(quantity: 4)).to eq(7.2)
+      expect(item.total_discount(quantity: 29)).to eq(52.2)
+      expect(item.total_discount(quantity: 30)).to eq(108)
+      expect(item.total_discount(quantity: 31)).to eq(111.6)
     end
   end
 end
