@@ -12,16 +12,16 @@ require 'rails_helper'
 # of tools you can use to make these specs even more expressive, but we're
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
-RSpec.describe "/items", type: :request do
+RSpec.describe "api/v1/items", type: :request do
   # This should return the minimal set of attributes required to create a valid
   # Item. As you add validations to Item, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    FactoryBot.attributes_for(:item)
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    FactoryBot.attributes_for(:item, price: 0)
   }
 
   # This should return the minimal set of values that should be in the headers
@@ -32,33 +32,35 @@ RSpec.describe "/items", type: :request do
     {}
   }
 
-  describe "GET /index" do
+  describe "GET /api/v1/items" do
+    let!(:item){ create :item }
+
     it "renders a successful response" do
-      Item.create! valid_attributes
-      get items_url, headers: valid_headers, as: :json
+      get api_v1_items_url, headers: valid_headers, as: :json
       expect(response).to be_successful
     end
   end
 
-  describe "GET /show" do
+  describe "GET /api/v1/items/:code" do
+    let!(:item){ create :item }
+
     it "renders a successful response" do
-      item = Item.create! valid_attributes
-      get item_url(item), as: :json
+      get api_v1_item_url(item), as: :json
       expect(response).to be_successful
     end
   end
 
-  describe "POST /create" do
+  describe "POST /api/v1/items" do
     context "with valid parameters" do
       it "creates a new Item" do
         expect {
-          post items_url,
+          post api_v1_items_url,
                params: { item: valid_attributes }, headers: valid_headers, as: :json
         }.to change(Item, :count).by(1)
       end
 
       it "renders a JSON response with the new item" do
-        post items_url,
+        post api_v1_items_url,
              params: { item: valid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:created)
         expect(response.content_type).to match(a_string_including("application/json"))
@@ -68,13 +70,13 @@ RSpec.describe "/items", type: :request do
     context "with invalid parameters" do
       it "does not create a new Item" do
         expect {
-          post items_url,
+          post api_v1_items_url,
                params: { item: invalid_attributes }, as: :json
         }.to change(Item, :count).by(0)
       end
 
       it "renders a JSON response with errors for the new item" do
-        post items_url,
+        post api_v1_items_url,
              params: { item: invalid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
@@ -82,23 +84,23 @@ RSpec.describe "/items", type: :request do
     end
   end
 
-  describe "PATCH /update" do
+  describe "PATCH /api/v1/items/:code" do
+    let!(:item){ create :item }
+
     context "with valid parameters" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        FactoryBot.attributes_for(:item).slice(:price, :code)
       }
 
       it "updates the requested item" do
-        item = Item.create! valid_attributes
-        patch item_url(item),
+        patch api_v1_item_url(code: item.code),
               params: { item: new_attributes }, headers: valid_headers, as: :json
         item.reload
-        skip("Add assertions for updated state")
+        expect(response).to have_http_status(:ok)
       end
 
       it "renders a JSON response with the item" do
-        item = Item.create! valid_attributes
-        patch item_url(item),
+        patch api_v1_item_url(code: item.code),
               params: { item: new_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to match(a_string_including("application/json"))
@@ -107,8 +109,7 @@ RSpec.describe "/items", type: :request do
 
     context "with invalid parameters" do
       it "renders a JSON response with errors for the item" do
-        item = Item.create! valid_attributes
-        patch item_url(item),
+        patch api_v1_item_url(code: item.code),
               params: { item: invalid_attributes }, headers: valid_headers, as: :json
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
@@ -116,11 +117,12 @@ RSpec.describe "/items", type: :request do
     end
   end
 
-  describe "DELETE /destroy" do
+  describe "DELETE /api/v1/destroy/:code" do
+    let!(:item){ create :item }
+
     it "destroys the requested item" do
-      item = Item.create! valid_attributes
       expect {
-        delete item_url(item), headers: valid_headers, as: :json
+        delete api_v1_item_url(code: item.code), headers: valid_headers, as: :json
       }.to change(Item, :count).by(-1)
     end
   end
