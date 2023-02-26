@@ -21,11 +21,11 @@ content-type: application/json
   "items": [
     {
       "code": "MUG",
-      "quantity": 2
+      "quantity": 1
     },
     {
       "code": "TSHIRT",
-      "quantity": 4
+      "quantity": 1
     },
     {
       "code": "HOODIE",
@@ -41,8 +41,12 @@ content-type: application/json
 {
   "items": [
     {
-      "code": "XYX",
+      "code": "MUG",
       "quantity": 2
+    },
+    {
+      "code": "TSHIRT",
+      "quantity": 1
     }
   ]
 }
@@ -55,11 +59,29 @@ content-type: application/json
   "items": [
     {
       "code": "MUG",
-      "quantity": 1
+      "quantity": 3
     },
     {
       "code": "TSHIRT",
       "quantity": 1
+    }
+  ]
+}
+
+
+###
+POST http://localhost:3000/api/v1/cart
+content-type: application/json
+
+{
+  "items": [
+    {
+      "code": "MUG",
+      "quantity": 2
+    },
+    {
+      "code": "TSHIRT",
+      "quantity": 4
     },
     {
       "code": "HOODIE",
@@ -136,6 +158,19 @@ content-type: application/json
     {
       "code": "HOODIE",
       "quantity": 1
+    }
+  ]
+}
+
+###
+POST http://localhost:3000/api/v1/cart
+content-type: application/json
+
+{
+  "items": [
+    {
+      "code": "XYX",
+      "quantity": 2
     }
   ]
 }
